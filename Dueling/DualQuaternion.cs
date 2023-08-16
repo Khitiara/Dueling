@@ -78,7 +78,8 @@ public struct DualQuaternion
 
     public static DualQuaternion operator /(DualQuaternion a, float b) => a * (1f / b);
 
-    public static void DecomposeRotationTranslation(DualQuaternion dq, out Quaternion rotation, out Vector3 translation) {
+    public static void
+        DecomposeRotationTranslation(DualQuaternion dq, out Quaternion rotation, out Vector3 translation) {
         rotation = dq.Real;
         Quaternion tQ = dq.Dual * 2f * Quaternion.Conjugate(dq.Real);
         translation = new Vector3(tQ.X, tQ.Y, tQ.Z);
@@ -104,7 +105,7 @@ public struct DualQuaternion
             -halfDistance * sinHalfAngle);
     }
 
-    private static void AxisAngleFromQuaternion(Quaternion q, out Vector3 axis, out float angle) {
+    internal static void AxisAngleFromQuaternion(Quaternion q, out Vector3 axis, out float angle) {
         Vector3 qv = Unsafe.As<Quaternion, Vector3>(ref q);
         if (qv.LengthSquared() < 1e-6f) {
             axis = Vector3.UnitX;
@@ -112,9 +113,9 @@ public struct DualQuaternion
             return;
         }
 
-        axis = Vector3.Normalize(qv);
-        float wClamped = Math.Clamp(q.W, -1f, 1f);
-        angle = 2 * MathF.Acos(wClamped);
+        float halfAngle = MathF.Atan2(qv.Length(), q.W);
+        angle = 2 * halfAngle;
+        axis = Vector3.Normalize(qv / MathF.Sin(halfAngle));
     }
 
     public static void DecomposeScrewParameters(DualQuaternion dq, out Vector3 pointOnAxis, out Vector3 axisDirection,

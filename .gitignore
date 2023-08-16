@@ -7,3 +7,4 @@ riderModule.iml
 packages/
 **/TestResults/
 coveragereport/
+*.user

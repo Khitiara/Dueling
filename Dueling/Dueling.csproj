@@ -7,5 +7,8 @@
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     </PropertyGroup>
+    <ItemGroup>
+        <InternalsVisibleTo Include="Dueling.Tests"/>
+    </ItemGroup>
 
 </Project>
