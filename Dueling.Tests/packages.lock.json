@@ -1098,7 +1098,7 @@
           "xunit.extensibility.core": "[2.5.1-pre.20]"
         }
       },
-      "dueling": {
+      "Khitiara.Dueling": {
         "type": "Project"
       }
     }

@@ -43,4 +43,16 @@ public class DualQuaternionTests
             _ => throw new XunitException($"Unexpected index {idx} in axis option array"),
         }, 0.005f);
     }
+
+    [Fact]
+    public void TestAxisAngleIdentity() {
+        DualQuaternion.AxisAngleFromQuaternion(Quaternion.Identity, out Vector3 axis, out float angle);
+        axis.Should().Be(Vector3.UnitX);
+        angle.Should().Be(0);
+    }
+
+    [Fact]
+    public void TestIdentityInverts() {
+        DualQuaternion.Inverse(DualQuaternion.Identity).Should().Be(DualQuaternion.Identity);
+    }
 }
