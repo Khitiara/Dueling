@@ -4,7 +4,8 @@ using System.Runtime.CompilerServices;
 namespace Dueling;
 
 public struct DualQuaternion
-    : IEquatable<DualQuaternion>,
+    :
+#if NET7_0_OR_GREATOR
         IEqualityOperators<DualQuaternion, DualQuaternion, bool>,
         IAdditionOperators<DualQuaternion, DualQuaternion, DualQuaternion>,
         IMultiplyOperators<DualQuaternion, DualQuaternion, DualQuaternion>,
@@ -13,7 +14,9 @@ public struct DualQuaternion
         IAdditiveIdentity<DualQuaternion, DualQuaternion>,
         IMultiplicativeIdentity<DualQuaternion, DualQuaternion>,
         IDivisionOperators<DualQuaternion, DualQuaternion, DualQuaternion>,
-        IDivisionOperators<DualQuaternion, float, DualQuaternion>
+        IDivisionOperators<DualQuaternion, float, DualQuaternion>,
+#endif
+        IEquatable<DualQuaternion>
 {
     public Quaternion Real;
     public Quaternion Dual;
@@ -29,7 +32,7 @@ public struct DualQuaternion
     public static bool operator !=(DualQuaternion left, DualQuaternion right) => !left.Equals(right);
 
     public static DualQuaternion Zero => default;
-    public static DualQuaternion Identity => new(Quaternion.Identity, Quaternion.Zero);
+    public static DualQuaternion Identity => new(Quaternion.Identity, default);
 
     public DualQuaternion(Quaternion real, Quaternion dual) {
         Real = real;
@@ -158,6 +161,8 @@ public struct DualQuaternion
         return m;
     }
 
+#if NET7_0_OR_GREATOR
     static DualQuaternion IAdditiveIdentity<DualQuaternion, DualQuaternion>.AdditiveIdentity => Zero;
     static DualQuaternion IMultiplicativeIdentity<DualQuaternion, DualQuaternion>.MultiplicativeIdentity => Identity;
+#endif
 }
