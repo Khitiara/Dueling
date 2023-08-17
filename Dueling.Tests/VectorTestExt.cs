@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
 
@@ -9,12 +8,11 @@ internal static class VectorTestExt
 {
     private static bool TestApprox<T>(T actual, T expected)
         where T : unmanaged {
-        int count = Marshal.SizeOf<T>() / 4;
         ReadOnlySpan<float> actualSpan =
-            MemoryMarshal.CreateReadOnlySpan(ref Unsafe.As<T, float>(ref actual), count);
+            MemoryMarshal.Cast<T, float>(MemoryMarshal.CreateReadOnlySpan(ref actual, 1));
         ReadOnlySpan<float> expectedSpan =
-            MemoryMarshal.CreateReadOnlySpan(ref Unsafe.As<T, float>(ref expected), count);
-        for (int i = 0; i < count; i++) {
+            MemoryMarshal.Cast<T, float>(MemoryMarshal.CreateReadOnlySpan(ref expected, 1));
+        for (int i = 0; i < actualSpan.Length; i++) {
             if (MathF.Abs(actualSpan[i] - expectedSpan[i]) >= DualQuaternionTests.Epsilon)
                 return false;
         }
