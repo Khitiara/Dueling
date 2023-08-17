@@ -5,7 +5,7 @@ namespace Dueling;
 
 public struct DualQuaternion
     :
-#if NET7_0_OR_GREATOR
+#if NET7_0_OR_GREATER
         IEqualityOperators<DualQuaternion, DualQuaternion, bool>,
         IAdditionOperators<DualQuaternion, DualQuaternion, DualQuaternion>,
         IMultiplyOperators<DualQuaternion, DualQuaternion, DualQuaternion>,
@@ -161,7 +161,7 @@ public struct DualQuaternion
         return m;
     }
 
-#if NET7_0_OR_GREATOR
+#if NET7_0_OR_GREATER
     static DualQuaternion IAdditiveIdentity<DualQuaternion, DualQuaternion>.AdditiveIdentity => Zero;
     static DualQuaternion IMultiplicativeIdentity<DualQuaternion, DualQuaternion>.MultiplicativeIdentity => Identity;
 #endif
