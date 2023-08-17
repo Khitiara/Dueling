@@ -122,7 +122,7 @@ public struct DualQuaternion
         out float pitch, out float theta) {
         DecomposeRotationTranslation(dq, out Quaternion rotation, out Vector3 translation);
         AxisAngleFromQuaternion(rotation, out axisDirection, out theta);
-        if (MathF.Abs(theta) < float.Epsilon) {
+        if (rotation.IsIdentity || MathF.Abs(theta) < float.Epsilon) {
             // pure translation
             theta = translation.Length();
             if (theta < float.Epsilon) {
