@@ -49,12 +49,7 @@ public struct DualQuaternion
         return new DualQuaternion(real, new Quaternion(translation, 0) * real * 0.5f);
     }
 
-    public static DualQuaternion Normalize(DualQuaternion dq) {
-        float recip = 1f / dq.Length();
-        dq.Real *= recip;
-        dq.Dual *= recip;
-        return dq;
-    }
+    public static DualQuaternion Normalize(DualQuaternion dq) => dq / dq.Length();
 
     public static DualQuaternion Conjugate(DualQuaternion dq) =>
         new(Quaternion.Conjugate(dq.Real), Quaternion.Conjugate(dq.Dual));
@@ -75,7 +70,7 @@ public struct DualQuaternion
     public static DualQuaternion operator *(DualQuaternion a, DualQuaternion b) =>
         // TODO: figure out if these mults are backwards for how we want to use this - this is mathematically correct
         // but we may want to use reversed
-        new(a.Real * b.Real, b.Real * a.Dual + a.Real * b.Dual);
+        new(a.Real * b.Real, b.Real * a.Dual + b.Dual * a.Real);
 
     public static DualQuaternion operator /(DualQuaternion a, DualQuaternion b) => a * Inverse(b);
 
@@ -148,7 +143,7 @@ public struct DualQuaternion
     }
 
     public static DualQuaternion Sclerp(DualQuaternion dq1, DualQuaternion dq2, float amount) {
-        DecomposeScrewParameters(Conjugate(dq1) * dq2, out Vector3 q, out Vector3 axis,
+        DecomposeScrewParameters(dq2 * Conjugate(dq1), out Vector3 q, out Vector3 axis,
             out float h, out float theta);
         return dq1 * CreateFromScrewParameters(q, axis, h, theta * amount);
     }

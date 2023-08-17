@@ -143,4 +143,11 @@ public class DualQuaternionTests
     public void TestNormalizeLength(DualQuaternion dq) {
         DualQuaternion.Normalize(dq).Length().Should().BeApproximately(1f, Epsilon);
     }
+
+    [Theory, AutoData,]
+    [Trait("Category", "Sclerp")]
+    public void TestSclerpSame(DualQuaternion dq, [Range(0.1f, 0.9f)] float t) {
+        dq = DualQuaternion.Normalize(dq);
+        DualQuaternion.Sclerp(dq, dq, t).Should().BeApproximately(dq);
+    }
 }
